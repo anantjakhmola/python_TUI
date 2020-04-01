@@ -1,10 +1,16 @@
-import os
+import os,getpass
 import subprocess
 os.system("tput setaf 1")
 print("\t\t\t Hi welcome to my TUI for some small tasks")
 os.system("tput setaf 7")
 
 print("\t\t\t-----------------------------------------")
+passwd = getpass.getpass("Enter ur password: ")
+apass = "anant"
+if passwd != apass:
+    print("authorization incorrect")
+    exit()
+    
 print("which machine you want to use local/remote: ",end="")
 location = input()
 print(location)
@@ -41,7 +47,7 @@ while True:
             docker_server = input()
             os.system("docker container run -itd --name {0} --network-alias site --network webnet phpser:v1".format(docker_server))
         elif int(ch) == 6:
-            os.system("write a package name lets see if its available: ", end="")
+            print("write a package name lets see if its available: ", end="")
             pack_name = input()
             os.system("dnf install {0}".format(pack_name))
         elif int(ch) == 7:
