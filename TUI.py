@@ -22,10 +22,11 @@ while True:
     Press 2: to check Calendar
     Press 3: conf web browser
     press 4: to create user
-    press 5: to start docker server with a site hosted
-    print 6: to install a package
-    print 7: to check about server?
-    press 8: to exit 
+    press 5: to configure docker repo
+    press 6: to start docker server with a site hosted
+    print 7: to install a package
+    print 8: to check about server?
+    press 9: to exit 
     """)
     print("Enter your choice: " , end="")
     ch=input()
@@ -43,16 +44,29 @@ while True:
             create_user = input()
             os.system("useradd {0}".format(create_user))   ##this is called place holder  or interpolation
         elif int(ch) == 5:
+            os.system("rpm -i epel-release-latest-8.noarch.rpm")
+            os.system("touch /etc/yum.repos.d/docker.repo")
+            file = open("/etc/yum.repos.d/docker.repo","w")
+            file.write(""" 
+            [docker]
+            baseurl=https://download.docker.com/linux/centos/7/x86_64/stable/
+            gpgcheck=0
+            """)
+            file.close()
+
+            os.system("yum update")
+            os.system("yum install docker-ce --nobest")
+        elif int(ch) == 6:
             print("gimme name of the server",end="")
             docker_server = input()
             os.system("docker container run -itd --name {0} --network-alias site --network webnet phpser:v1".format(docker_server))
-        elif int(ch) == 6:
+        elif int(ch) == 7:
             print("write a package name lets see if its available: ", end="")
             pack_name = input()
             os.system("dnf install {0}".format(pack_name))
-        elif int(ch) == 7:
-            os.system("systemctl restart httpd")
         elif int(ch) == 8:
+            os.system("systemctl restart httpd")
+        elif int(ch) == 9:
             exit()
         else:
             print("option not found")
